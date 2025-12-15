@@ -9,12 +9,13 @@ const {
   deleteTestCase
 } = require('../controllers/testCaseController');
 const { auth } = require('../middleware/auth');
+const { apiLimiter } = require('../middleware/rateLimiter');
 
-router.post('/', auth, createTestCase);
-router.get('/', auth, getAllTestCases);
-router.get('/:id', auth, getTestCaseById);
-router.put('/:id', auth, updateTestCase);
-router.post('/:id/execute', auth, executeTestCase);
-router.delete('/:id', auth, deleteTestCase);
+router.post('/', apiLimiter, auth, createTestCase);
+router.get('/', apiLimiter, auth, getAllTestCases);
+router.get('/:id', apiLimiter, auth, getTestCaseById);
+router.put('/:id', apiLimiter, auth, updateTestCase);
+router.post('/:id/execute', apiLimiter, auth, executeTestCase);
+router.delete('/:id', apiLimiter, auth, deleteTestCase);
 
 module.exports = router;

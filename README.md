@@ -9,6 +9,7 @@ A comprehensive REST API for Project Management and Testing System built with No
 - **Task Management**: Task creation, assignment, and tracking within projects
 - **Test Case Management**: Create, execute, and track test cases for projects
 - **Role-Based Access Control**: Admin, Manager, Developer, and Tester roles
+- **Rate Limiting**: Protection against brute force attacks and API abuse
 - **RESTful API**: Clean and intuitive API endpoints
 
 ## Technology Stack
@@ -19,6 +20,7 @@ A comprehensive REST API for Project Management and Testing System built with No
 - **SQLite** - Database (easily switchable to PostgreSQL/MySQL)
 - **JWT** - Authentication
 - **bcryptjs** - Password hashing
+- **express-rate-limit** - Rate limiting for security
 
 ## Installation
 
@@ -292,6 +294,21 @@ Authorization: Bearer <token>
 - **Developer**: Can view projects, manage tasks
 - **Tester**: Can view projects, manage test cases
 
+## Security Features
+
+### Rate Limiting
+The API implements rate limiting to protect against brute force attacks and API abuse:
+
+- **Authentication endpoints** (`/api/auth/*`): 5 requests per 15 minutes per IP
+- **General API endpoints**: 100 requests per 15 minutes per IP
+
+When the rate limit is exceeded, the API returns a 429 status code with an appropriate error message.
+
+### Authentication & Authorization
+- JWT-based authentication with 24-hour token expiration
+- Password hashing using bcryptjs
+- Role-based access control (RBAC) for protected resources
+
 ## Error Handling
 
 The API returns appropriate HTTP status codes and error messages:
@@ -302,6 +319,7 @@ The API returns appropriate HTTP status codes and error messages:
 - `401 Unauthorized` - Authentication required or failed
 - `403 Forbidden` - Insufficient permissions
 - `404 Not Found` - Resource not found
+- `429 Too Many Requests` - Rate limit exceeded
 - `500 Internal Server Error` - Server errors
 
 ## Development

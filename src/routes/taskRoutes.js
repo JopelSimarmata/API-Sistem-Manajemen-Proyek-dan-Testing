@@ -8,11 +8,12 @@ const {
   deleteTask
 } = require('../controllers/taskController');
 const { auth } = require('../middleware/auth');
+const { apiLimiter } = require('../middleware/rateLimiter');
 
-router.post('/', auth, createTask);
-router.get('/', auth, getAllTasks);
-router.get('/:id', auth, getTaskById);
-router.put('/:id', auth, updateTask);
-router.delete('/:id', auth, deleteTask);
+router.post('/', apiLimiter, auth, createTask);
+router.get('/', apiLimiter, auth, getAllTasks);
+router.get('/:id', apiLimiter, auth, getTaskById);
+router.put('/:id', apiLimiter, auth, updateTask);
+router.delete('/:id', apiLimiter, auth, deleteTask);
 
 module.exports = router;

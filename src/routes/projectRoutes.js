@@ -8,11 +8,12 @@ const {
   deleteProject
 } = require('../controllers/projectController');
 const { auth, authorize } = require('../middleware/auth');
+const { apiLimiter } = require('../middleware/rateLimiter');
 
-router.post('/', auth, authorize('admin', 'manager'), createProject);
-router.get('/', auth, getAllProjects);
-router.get('/:id', auth, getProjectById);
-router.put('/:id', auth, authorize('admin', 'manager'), updateProject);
-router.delete('/:id', auth, authorize('admin', 'manager'), deleteProject);
+router.post('/', apiLimiter, auth, authorize('admin', 'manager'), createProject);
+router.get('/', apiLimiter, auth, getAllProjects);
+router.get('/:id', apiLimiter, auth, getProjectById);
+router.put('/:id', apiLimiter, auth, authorize('admin', 'manager'), updateProject);
+router.delete('/:id', apiLimiter, auth, authorize('admin', 'manager'), deleteProject);
 
 module.exports = router;
