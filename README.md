@@ -317,6 +317,17 @@ npm run dev
 npm start
 ```
 
+## Production Deployment
+
+For production deployment:
+
+1. Set `NODE_ENV=production` in your `.env` file
+2. Use a strong `JWT_SECRET` (at least 32 characters)
+3. Consider using PostgreSQL or MySQL instead of SQLite for better scalability
+4. Use database migrations instead of `sync()` for schema management
+5. Implement rate limiting and additional security measures
+6. Use a process manager like PM2 to keep the application running
+
 ## License
 
 ISC

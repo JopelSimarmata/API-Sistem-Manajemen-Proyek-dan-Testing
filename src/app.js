@@ -47,7 +47,13 @@ const PORT = process.env.PORT || 3000;
 
 const startServer = async () => {
   try {
-    await sequelize.sync({ alter: true });
+    // Use alter:true for development only. In production, use migrations instead.
+    // For production, change this to: await sequelize.sync();
+    const syncOptions = process.env.NODE_ENV === 'production' 
+      ? {} 
+      : { alter: true };
+    
+    await sequelize.sync(syncOptions);
     console.log('Database synced successfully');
 
     app.listen(PORT, () => {

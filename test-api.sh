@@ -18,8 +18,12 @@ MANAGER_RESPONSE=$(curl -s -X POST "$API_URL/api/auth/register" \
     "password": "password123",
     "role": "manager"
   }')
-echo "$MANAGER_RESPONSE" | grep -o '"token":"[^"]*' | sed 's/"token":"//' > /tmp/manager_token.txt
-MANAGER_TOKEN=$(cat /tmp/manager_token.txt)
+# Check if jq is available, otherwise fallback to grep/sed
+if command -v jq &> /dev/null; then
+  MANAGER_TOKEN=$(echo "$MANAGER_RESPONSE" | jq -r '.token')
+else
+  MANAGER_TOKEN=$(echo "$MANAGER_RESPONSE" | grep -o '"token":"[^"]*' | sed 's/"token":"//')
+fi
 echo "Manager registered. Token: ${MANAGER_TOKEN:0:20}..."
 echo ""
 
@@ -33,8 +37,12 @@ DEV_RESPONSE=$(curl -s -X POST "$API_URL/api/auth/register" \
     "password": "password123",
     "role": "developer"
   }')
-echo "$DEV_RESPONSE" | grep -o '"token":"[^"]*' | sed 's/"token":"//' > /tmp/dev_token.txt
-DEV_TOKEN=$(cat /tmp/dev_token.txt)
+# Check if jq is available, otherwise fallback to grep/sed
+if command -v jq &> /dev/null; then
+  DEV_TOKEN=$(echo "$DEV_RESPONSE" | jq -r '.token')
+else
+  DEV_TOKEN=$(echo "$DEV_RESPONSE" | grep -o '"token":"[^"]*' | sed 's/"token":"//')
+fi
 echo "Developer registered. Token: ${DEV_TOKEN:0:20}..."
 echo ""
 
@@ -131,7 +139,3 @@ echo ""
 echo ""
 
 echo "=== Test Script Completed ==="
-echo "Tokens saved in /tmp/ directory for further testing"
-
-# Clean up
-rm -f /tmp/manager_token.txt /tmp/dev_token.txt
